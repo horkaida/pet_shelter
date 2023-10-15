@@ -5,6 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-FEEDBACKS
+{% for animal in animal_list %}
+    {{ animal.name }}
+
+{% endfor %}
 </body>
 </html>

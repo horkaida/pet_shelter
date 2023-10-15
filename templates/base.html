@@ -1,0 +1,16 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - Pet_shelter</title>
+<link rel="stylesheet" href="../static/styles.css}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<nav class="navbar">
+    <a href="/">Головна</a>
+</nav>
+<h1>Сергій Притулок</h1>
+<section class="content">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    {% block content %}{% endblock %}
+</section>

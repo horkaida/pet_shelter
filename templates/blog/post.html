@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-POST TITLE
+<h1>
+    {{ post.title }}
+</h1>
+<p>
+    {{ post.text}}
+</p>
+<p>
+    {{ post.date|date:"M d, Y" }}
+</p>
+<a href="/blog?tag={{ post.tag_id_id }}">{{ post.tag_id.name }}</a>
 <body>
 
 </body>
