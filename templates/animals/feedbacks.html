@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="main-page">
+            <form method="get">
+                <label for="type">Сортувати</label>
+                <select name="type" id="type">
+                <option value=''>Всі</option>
+                    {% for type in types %}
+                        <option value={{ type.type }}>{{ type.type }}</option>
+                        {{ type }}
+                    {% endfor %}
+                </select>
+                <button type="submit">Сортувати</button>
+            </form>
+        <div class="container">
+            <div class="feedbacks">
+                {% for feedback in feedbacks %}
+                    <div class="feedback">
+                        <p>{{ feedback.animal_id.name }}</p>
+                        <p>{{ feedback.title }}</p>
+                        <p>{{ feedback.text }}</p>
+                        <p>{{ feedback.user_id.first_name }}</p>
+                        <p>{{ feedback.user_id.second_name }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

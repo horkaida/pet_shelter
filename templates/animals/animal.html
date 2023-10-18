@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="main-page">
+        <div class="container">
+            <div class="animals">
+                <div class="animal">
+                    <p>
+                        {{ animal.name }} </br>
+                        {{ animal.type }} </br>
+                        {{ animal.availability }} </br>
+                        {{ animal.age }} </br>
+                        {{ animal.sex }} </br>
+                        {{ animal.healthy }} </br>
+                        {{ animal.breed }} </br>
+                        {{ animal.description }} </br>
+                    </p>
+                </div>
+            </div>
+            <div class="feedbacks">
+                {% if user.is_authenticated %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="feedback">Відгук: </label>
+                        <input id="feedback" type="text" name="title" placeholder="Заголовок"/>
+                        <input id="feedback" type="text" name="text" placeholder="Текст"/>
+                        <input id="animal_id" type="number" name="animal_id" value={{ animal.id }} hidden/>
+                        <input type="submit" value="Надіслати">
+                    </form>
+                {% else %}
+                    <div>
+                        <p>
+                            Щоб залишити відгук, будь ласка, <a href="/login">Увійдіть</a>
+                        </p>
+                    </div>
+                {% endif %}
+                {% for feedback in animal_feedbacks %}
+                    <div class="feedback">
+                        <p>{{ feedback.animal_id.name }}</p>
+                        <p>{{ feedback.title }}</p>
+                        <p>{{ feedback.text }}</p>
+                        <p>{{ feedback.user_id.first_name }}</p>
+                        <p>{{ feedback.user_id.second_name }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

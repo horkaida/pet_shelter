@@ -1,10 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-ALL ANIMALS
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="main-page">
+        <div class="container">
+            <div class="animals">
+                <form method="get">
+                    <label for="type">Сортувати</label>
+                    <select name="type" id="type">
+                        <option value=''>Всі</option>
+                        {% for type in types %}
+                            <option value={{ type.type }}>{{ type.type }}</option>
+                            {{ type }}
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Сортувати</button>
+                </form>
+                {% for animal in animal_list %}
+                    <div class="animal">
+                        <a href="/animals/{{ animal.id }}">{{ animal.name }}</a>
+                        <p>{{ animal.age }}</p>
+                        <p>{{ animal.type }}</p>
+                        <p>{% if animal.availability %}
+                            Доступний
+                        {% else %}
+                            Недоступний
+                        {% endif %}</p>
+                        <p>{{ animal.breed }}</p>
+                        <p>
+                            {% if animal.healthy %}
+                                Здоровий
+                            {% else %}
+                                Має вади
+                            {% endif %}
+                        </p>
+                        <p>{% if animal.sex %}
+                            Стать: чоловіча
+                        {% else %}
+                            Стать: жіноча
+                        {% endif %}</p>
+                        <p>{{ animal.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="feedbacks">
+                {% for feedback in all_feedbacks.all|slice:"5" %}
+                    <div class="feedback">
+                        <p>{{ feedback.animal_id.name }}</p>
+                        <p>{{ feedback.title }}</p>
+                        <p>{{ feedback.text }}</p>
+                        <p>{{ feedback.user_id.first_name }}</p>
+                        <p>{{ feedback.user_id.second_name }}</p>
+                    </div>
+                {% endfor %}
+                <a href="/animals/feedbacks">Дивитись всі</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

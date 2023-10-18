@@ -1,0 +1,45 @@
+<!doctype html>
+{% load static %}
+<title>{% block title %}{% endblock %} - Pet_shelter</title>
+<link rel="stylesheet" href="../static/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+<nav style="display: flex">
+    <div class="navbar">
+        <a href="/">Головна</a>
+    </div>
+
+    <div class="navbar">
+        <a href="/animals">Тварини</a>
+    </div>
+
+    <div class="navbar">
+        <a href="/blog">Блог</a>
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="navbar">
+            <form method="post" action="/logout">
+                {% csrf_token %}
+                <button type="submit">Вийти</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="navbar">
+            <a href="/login">Увійти</a>
+        </div>
+        <div class="navbar">
+            <a href="/register">Зареєструватись</a>
+        </div>
+    {% endif %}
+</nav>
+<h1>Сергій Притулок</h1>
+<section class="content">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    {% block content %}{% endblock %}
+</section>
+</body>

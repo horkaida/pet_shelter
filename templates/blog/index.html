@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Hello
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="leftcolumn">
+            {% for post in posts %}
+                <div class="card">
+                   <a href="/blog/{{ post.id }}"> <h2>{{ post.title }}</h2>
+                   </a>
+                    <h5>{{ post.date }}</h5>
+                    <p>
+                        {{ post.text|truncatewords_html:20}}
+                        <a href="/blog/{{ post.id }}">Дивитись повністю</a>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
