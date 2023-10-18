@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if error %}
+        <p style="color: red">{{ error }}</p>
+    {% endif %}
+    <form method="post" style="border:1px solid #ccc">
+        {% csrf_token %}
+        <div class="container">
+            <h1>Sign Up</h1>
+            <p>Будь ласка, заповніть поля для реєстрації.</p>
+            <hr>
+
+            <label for="username"><b>Юзернейм</b></label>
+            <input type="text" name="username" required>
+
+            <label for="email"><b>Електронна адреса</b></label>
+            <input type="text" name="email" required>
+
+            <label for="password"><b>Пароль</b></label>
+            <input type="password" name="password" required>
+
+            <label for="repeat_password"><b>Повторіть пароль</b></label>
+            <input type="password" name="repeat_password" required>
+
+            <label for="first_name"><b>Ім'я</b></label>
+            <input type="text" name="first_name" required>
+
+            <label for="last_name"><b>Прізвище</b></label>
+            <input type="text" name="last_name" required>
+
+
+            <div class="clearfix">
+                <button type="submit" class="signupbtn">Sign Up</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
