@@ -19,7 +19,7 @@
                     <div class="animal">
                         <a href="/animals/{{ animal.id }}">{{ animal.name }}</a>
                         <p>{{ animal.age }}</p>
-                        <p>{{ animal.type }}</p>
+                        <p>{{ animal.animal_type.type }}</p>
                         <p>{% if animal.availability %}
                             Доступний
                         {% else %}
