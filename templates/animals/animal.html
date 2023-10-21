@@ -4,9 +4,11 @@
         <div class="container">
             <div class="animals">
                 <div class="animal">
+                {% if user.is_authenticated %}
                 <p>
                     <a href="/animals/{{ animal.id}}/schedule">Забронювати прогулянку</a>
                 </p>
+                {%endif%}
                     <p>
                         {{ animal.name }} </br>
                         {{ animal.animal_type.type }} </br>

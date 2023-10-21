@@ -129,13 +129,15 @@ body {
     justify-content: space-between;
 }
 .main-page .container .animals {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
-.main-page .container .animals .animal {
+.main-page .container .animals .animal-card {
     padding: 20px;
-    border-bottom: 1px solid grey;
+    margin-right: 20px;
+}
+.main-page .container .animals .animal-card p {
+    margin: 2px 0;
 }
 .main-page .container .feedbacks {
     padding: 20px;
@@ -223,7 +225,22 @@ button:hover {
 body {
     background: white !important;
 }
-
 nav.nav-container {
     background: #000;
 }
+.animal-card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.animal-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.animal-card .container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add some padding inside the card container */

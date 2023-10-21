@@ -3,7 +3,6 @@ import animals.models
 from animals.forms import FeedbackForm
 from function_schedule import get_slots, get_calendar
 from datetime import datetime, timedelta, date, timezone
-from django.utils.timezone import utc
 
 
 def get_all_animals(request):
@@ -38,25 +37,21 @@ def get_animal(request, animal_id):
 
 def get_schedule(request, animal_id):
     duration_options = [1, 2, 3]
-    booked_appointments = (animals.models.Schedule.objects.all().
-                           filter(animal_id_id=animal_id).
-                           values_list('start_time',
-                                       'end_time'))
-    booked_appointments = list(booked_appointments)
+    booked_appointments = (animals.models.Schedule.objects.all()
+                           .filter(animal_id_id=animal_id)
+                           .values_list('start_time','end_time'))
     if request.method == 'GET':
-        current_day = date.today()
-        last_calendar_day = get_calendar()
+        last_calendar_day = get_calendar()[-1]
         chosen_day = request.GET.get('chosen_day')
         chosen_duration = request.GET.get('duration_options')
-        modified_slots = []
+        slots = []
         if chosen_duration:
-            slots = get_slots(booked_appointments, int(chosen_duration))
-            modified_slots = [{'timestamp': slot.timestamp(), "display_date": slot} for slot in slots]
+            slots = [{'timestamp': slot.timestamp(), "display_date": slot} for slot in get_slots(list(booked_appointments), int(chosen_duration))]
         return render(request, 'animals/schedule.html',
-                      {'modified_slots': modified_slots,
+                      {'slots': slots,
                        'duration_options': duration_options,
-                       'current_day': current_day,
-                       'last_calendar_day': last_calendar_day[-1],
+                       'current_day': date.today(),
+                       'last_calendar_day': last_calendar_day,
                        'chosen_day': chosen_day,
                        'chosen_duration':chosen_duration})
     if request.method == 'POST':

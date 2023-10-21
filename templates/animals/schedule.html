@@ -39,7 +39,7 @@
                 {% csrf_token %}
                     <label for="start_time">Обрати час</label>
                     <select name="start_time" id="start_time">
-                        {% for slot in modified_slots %}
+                        {% for slot in slots %}
                             <option value={{ slot.timestamp }}>{{ slot.display_date }}</option>
                         {% endfor %}
                     </select>
