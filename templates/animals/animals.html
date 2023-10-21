@@ -2,8 +2,6 @@
 
 {% block content %}
     <div class="main-page">
-        <div class="container">
-            <div class="animals">
                 <form method="get">
                     <label for="type">Сортувати</label>
                     <select name="type" id="type">
@@ -15,11 +13,16 @@
                     </select>
                     <button type="submit">Сортувати</button>
                 </form>
+
+            <h3>Тварини</h3>
+        <div class="container">
+            <div class="animals">
                 {% for animal in animal_list %}
-                    <div class="animal">
-                        <a href="/animals/{{ animal.id }}">{{ animal.name }}</a>
+                    <div class="animal-card">
+                      <div class="container">
+                        <a href="/animals/{{ animal.id }}"><h4>{{ animal.name }}</h4></a>
                         <p>{{ animal.age }}</p>
-                        <p>{{ animal.type }}</p>
+                        <p>{{ animal.animal_type.type }}</p>
                         <p>{% if animal.availability %}
                             Доступний
                         {% else %}
@@ -39,10 +42,12 @@
                             Стать: жіноча
                         {% endif %}</p>
                         <p>{{ animal.description }}</p>
+                      </div>
                     </div>
                 {% endfor %}
             </div>
             <div class="feedbacks">
+                <h3>Відгуки</h3>
                 {% for feedback in all_feedbacks.all|slice:"5" %}
                     <div class="feedback">
                         <p>{{ feedback.animal_id.name }}</p>

@@ -4,13 +4,30 @@
         <div class="container">
             <div class="animals">
                 <div class="animal">
+                {% if user.is_authenticated %}
+                <p>
+                    <a href="/animals/{{ animal.id}}/schedule">Забронювати прогулянку</a>
+                </p>
+                {%endif%}
                     <p>
                         {{ animal.name }} </br>
-                        {{ animal.type }} </br>
-                        {{ animal.availability }} </br>
+                        {{ animal.animal_type.type }} </br>
+                        {% if animal.availability %}
+                            Доступний
+                        {% else %}
+                            Недоступний
+                        {% endif %} </br>
                         {{ animal.age }} </br>
-                        {{ animal.sex }} </br>
-                        {{ animal.healthy }} </br>
+                        {% if animal.healthy %}
+                            Здоровий
+                        {% else %}
+                            Має вади
+                        {% endif %} </br>
+                        {% if animal.sex %}
+                            Стать: чоловіча
+                        {% else %}
+                            Стать: жіноча
+                        {% endif %} </br>
                         {{ animal.breed }} </br>
                         {{ animal.description }} </br>
                     </p>
@@ -21,9 +38,7 @@
                     <form method="POST">
                         {% csrf_token %}
                         <label for="feedback">Відгук: </label>
-                        <input id="feedback" type="text" name="title" placeholder="Заголовок"/>
-                        <input id="feedback" type="text" name="text" placeholder="Текст"/>
-                        <input id="animal_id" type="number" name="animal_id" value={{ animal.id }} hidden/>
+                        {{ feedback_from }}
                         <input type="submit" value="Надіслати">
                     </form>
                 {% else %}

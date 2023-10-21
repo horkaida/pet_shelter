@@ -1,15 +1,14 @@
-import datetime
-from datetime import timedelta
+import datetime, calendar
+from datetime import timedelta, datetime, date, timezone
 
-appointments = [(datetime.datetime(2017, 9, 7, 9, 30),
-                 datetime.datetime(2017, 9, 7, 12, 30)),
-                (datetime.datetime(2017, 9, 7, 13, 0),
-                 datetime.datetime(2017, 9, 7, 14, 0)),
-                ]
-
-
-def get_slots(appointments, duration=timedelta(hours=1)):
-    hours = (datetime.datetime(2017, 9, 7, 8, 0), datetime.datetime(2017, 9, 7, 18, 0))
+def get_slots(appointments, hours=1):
+    duration = timedelta(hours=hours)
+    current_year = date.today().year
+    current_month = date.today().month
+    current_day = date.today().day
+    hours = (datetime(current_year, current_month, current_day, 8, 0)
+             .replace(tzinfo=timezone.utc), datetime(current_year, current_month, current_day, 18, 0)
+             .replace(tzinfo=timezone.utc))
     available_slots = []
     new_app = []
     for i in range(len(appointments)):
@@ -21,3 +20,8 @@ def get_slots(appointments, duration=timedelta(hours=1)):
             available_slots.append(freetime_start)
             freetime_start += timedelta(minutes=15)
     return available_slots
+
+def get_calendar():
+    num_days = calendar.monthrange(date.today().year, date.today().month)[1]
+    days = [date(date.today().year, date.today().month, day) for day in range(1, num_days+1)]
+    return days

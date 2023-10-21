@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 class AnimalType(models.Model):
     type = models.CharField(max_length=200)
+    def __str__(self):
+        return self.type
 
 class Animal(models.Model):
     name = models.CharField(max_length=100)
@@ -13,6 +15,8 @@ class Animal(models.Model):
     description = models.TextField()
     healthy = models.BooleanField()
     animal_type = models.ForeignKey(AnimalType, on_delete=models.CASCADE)
+    # def __str__(self):
+    #     return self.name
 
 
 class AnimalMedia(models.Model):
@@ -28,8 +32,12 @@ class Schedule(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+
 class Feedback(models.Model):
     title = models.CharField(max_length=100)
     text = models.TextField()
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     animal_id = models.ForeignKey(Animal, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title

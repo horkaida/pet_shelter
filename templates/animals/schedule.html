@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="leftcolumn">
+            <form method="get">
+                <label for="start">Оберіть день:</label>
+                <input type="date" id="start" value= {{ current_day|date:"Y-m-d" }} name="chosen_day"  min={{ current_day|date:"Y-m-d" }} max={{ last_calendar_day|date:"Y-m-d"}}>
+                <button type="submit">Обрати</button>
+            </form>
+            {% if chosen_day %}
+                <form method="get">
+                    <label for="duration_options">Обрати тривалість в годинах</label>
+                    <select name="duration_options" id="duration_options">
+                        {% for hour in duration_options %}
+                            <option value={{ hour }}>{{ hour }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Обрати</button>
+                </form>
+            {% endif %}
+
+            {% if chosen_duration %}
+                <form method="get">
+                    <label for="duration_options">Обрати тривалість в годинах</label>
+                    <select name="duration_options" id="duration_options">
+                        {% for hour in duration_options %}
+                            {% if chosen_duration|slugify == hour|slugify %}
+                                <option selected value={{ hour }}> {{ hour }} </option>
+                            {% else %}
+                                <option value={{ hour }}> {{ hour }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Обрати</button>
+                </form>
+                <form method="post">
+                {% csrf_token %}
+                    <label for="start_time">Обрати час</label>
+                    <select name="start_time" id="start_time">
+                        {% for slot in slots %}
+                            <option value={{ slot.timestamp }}>{{ slot.display_date }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" name="chosen_duration" value={{ chosen_duration }} hidden>
+                    <button type="submit">Обрати</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
