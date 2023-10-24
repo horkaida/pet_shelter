@@ -1,6 +1,18 @@
 import datetime, calendar
 from datetime import timedelta, datetime, date, timezone
 
+# appointments = [(datetime(date.today().year, date.today().month, date.today().day, 9, 30, tzinfo=timezone.utc),
+#                  datetime(date.today().year, date.today().month, date.today().day, 12, 30, tzinfo=timezone.utc)),
+#                 (datetime(date.today().year, date.today().month, date.today().day, 13, 0, tzinfo=timezone.utc),
+#                  datetime(date.today().year, date.today().month, date.today().day, 14, 0, tzinfo=timezone.utc)),
+#                 (datetime(date.today().year, date.today().month, date.today().day, 16, 30, tzinfo=timezone.utc),
+#                  datetime(date.today().year, date.today().month, date.today().day, 17, 0, tzinfo=timezone.utc))
+#                 ]
+appointments = [(datetime(2023, 10, 25, 9, 30, tzinfo=timezone.utc),
+                  datetime(2023, 10, 25, 12, 30, tzinfo=timezone.utc)),
+                 (datetime(2023, 10, 25, 13, 0, tzinfo=timezone.utc),
+                  datetime(2023, 10, 25, 13, 30, tzinfo=timezone.utc)),
+                 ]
 def get_slots(appointments, hours=1):
     duration = timedelta(hours=hours)
     current_year = date.today().year
@@ -21,7 +33,20 @@ def get_slots(appointments, hours=1):
             freetime_start += timedelta(minutes=15)
     return available_slots
 
+
 def get_calendar():
     num_days = calendar.monthrange(date.today().year, date.today().month)[1]
-    days = [date(date.today().year, date.today().month, day) for day in range(1, num_days+1)]
+    days = [date(date.today().year, date.today().month, day) for day in range(1, num_days + 1)]
     return days
+
+#
+# changed_day_appointments = []
+# for one_tuple in appointments:
+#     for item in one_tuple:
+#         item = item + timedelta(days=1)
+#         changed_day_appointments.append(item)
+# changed_day_appointments = list(zip(*[changed_day_appointments] * 2))
+
+res = get_slots(appointments)
+for i in res:
+    print(i)
