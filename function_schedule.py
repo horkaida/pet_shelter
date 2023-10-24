@@ -1,13 +1,10 @@
 import datetime, calendar
 from datetime import timedelta, datetime, date, timezone
 
-def get_slots(appointments, hours=1):
+def get_slots(appointments, chosen_day, chosen_month, chosen_year, hours=1):
     duration = timedelta(hours=hours)
-    current_year = date.today().year
-    current_month = date.today().month
-    current_day = date.today().day
-    hours = (datetime(current_year, current_month, current_day, 8, 0)
-             .replace(tzinfo=timezone.utc), datetime(current_year, current_month, current_day, 18, 0)
+    hours = (datetime(chosen_year, chosen_month, chosen_day, 8, 0)
+             .replace(tzinfo=timezone.utc), datetime(chosen_year, chosen_month, chosen_day, 18, 0)
              .replace(tzinfo=timezone.utc))
     available_slots = []
     new_app = []

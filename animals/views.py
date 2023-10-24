@@ -37,23 +37,28 @@ def get_animal(request, animal_id):
 
 def get_schedule(request, animal_id):
     duration_options = [1, 2, 3]
-    booked_appointments = (animals.models.Schedule.objects.all()
-                           .filter(animal_id_id=animal_id)
-                           .values_list('start_time','end_time'))
+    slots = []
     if request.method == 'GET':
-        last_calendar_day = get_calendar()[-1]
-        chosen_day = request.GET.get('chosen_day')
         chosen_duration = request.GET.get('duration_options')
-        slots = []
-        if chosen_duration:
-            slots = [{'timestamp': slot.timestamp(), "display_date": slot} for slot in get_slots(list(booked_appointments), int(chosen_duration))]
+        last_calendar_day = get_calendar()[-1]
+        chosen_date = request.GET.get('chosen_date')
+        if chosen_date:
+            date_info = chosen_date.split('-')
+            if chosen_duration:
+                booked_appointments = (animals.models.Schedule.objects.all()
+                                       .filter(animal_id_id=animal_id, start_time__day=int(date_info[2]))
+                                       .values_list('start_time', 'end_time'))
+                slots = [{'timestamp': slot.timestamp(), "display_date": slot} for slot in
+                         get_slots(appointments=list(booked_appointments), chosen_year=int(date_info[0]),
+                                   chosen_month=int(date_info[1]), chosen_day=int(date_info[2]),
+                                   hours=int(chosen_duration))]
         return render(request, 'animals/schedule.html',
                       {'slots': slots,
                        'duration_options': duration_options,
                        'current_day': date.today(),
                        'last_calendar_day': last_calendar_day,
-                       'chosen_day': chosen_day,
-                       'chosen_duration':chosen_duration})
+                       'chosen_date': chosen_date,
+                       'chosen_duration': chosen_duration})
     if request.method == 'POST':
         chosen_duration = int(request.POST.get('chosen_duration'))
         start_time = datetime.fromtimestamp(float(request.POST.get('start_time')))
@@ -64,7 +69,7 @@ def get_schedule(request, animal_id):
                                               animal_id_id=animal_id,
                                               user_id_id=request.user.id)
         new_booking.save()
-        return render(request, 'animals/success_page.html', {'start_time':start_time, 'end_time':end_time})
+        return render(request, 'animals/success_page.html', {'start_time': start_time, 'end_time': end_time})
 
 
 def get_all_feedbacks(request):
