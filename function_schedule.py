@@ -1,7 +1,11 @@
 import datetime, calendar
 from datetime import timedelta, datetime, date, timezone
 
+
 def get_slots(appointments, chosen_day, chosen_month, chosen_year, hours=1):
+    for x in appointments:
+        if x[0].day != chosen_day or x[0].month != chosen_month or x[0].year != chosen_year:
+            return []
     duration = timedelta(hours=hours)
     hours = (datetime(chosen_year, chosen_month, chosen_day, 8, 0)
              .replace(tzinfo=timezone.utc), datetime(chosen_year, chosen_month, chosen_day, 18, 0)
@@ -22,3 +26,4 @@ def get_calendar():
     num_days = calendar.monthrange(date.today().year, date.today().month)[1]
     days = [date(date.today().year, date.today().month, day) for day in range(1, num_days+1)]
     return days
+
