@@ -1,12 +1,18 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+import animals.models
+from animals.models import Schedule
 
 def get_user(request):
     return render(request, 'user/user.html')
 
 def get_user_history(request):
-    return render(request, 'user/user.html', {})
+    if request.user.is_authenticated:
+        all_appointments = animals.models.Schedule.objects.all().filter(user_id_id=request.user.id)
+        return render(request, 'user/user_history.html', {'all_appointments':all_appointments})
+    else:
+        return redirect('/login')
 
 def log_in(request):
     if request.method=='GET':

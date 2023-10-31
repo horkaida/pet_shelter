@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for appointment in all_appointments %}
+        <a href="/animal/{{ appointment.animal_id }}">{{ appointment.animal_id.name }}</a> <br>
+        {{ appointment.start_time }}<br>
+        {{ appointment.end_time }}<br>
+    {% endfor %}
+
+{% endblock %}
