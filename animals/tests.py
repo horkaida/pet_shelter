@@ -1,7 +1,15 @@
 from datetime import datetime, timezone
 
+from django.urls import reverse
+
+import user.models
+from django.contrib.auth.models import User
 import unittest
+
+import animals.models
 from function_schedule import get_slots
+
+from django.test import TestCase, Client
 class TestSchedule(unittest.TestCase):
     appointments = [(datetime(2023, 10, 24, 9, 30, tzinfo=timezone.utc),
                      datetime(2023, 10, 24, 12, 30, tzinfo=timezone.utc)),
@@ -118,7 +126,32 @@ class TestSchedule(unittest.TestCase):
                         datetime(2023, 10, 24, 16, 45, tzinfo=timezone.utc)]
         self.assertEqual(expected_res, available_slots)
 
+class TestFeedback(TestCase):
+    fixtures = ["all_data.json"]
+    def test_create_feedback(self):
+        c = Client()
+        response_login = c.post(reverse('log_in'), {'username': 'test1', 'password': 'test1'})
+        test_animal = animals.models.Animal.objects.filter(id=1).first()
+        response_feedback = c.post(reverse('get_animal', kwargs={'animal_id': test_animal.id}), {'title':'title_test', 'text':'text_test'})
+        created_feedback = animals.models.Feedback.objects.filter(text='text_test').first()
+        status_code_ = response_feedback.status_code
+        self.assertIn('text_test', created_feedback.text)
+        self.assertIn('_auth_user_id', c.session)
+        self.assertEqual(status_code_, 302)
 
 
+class TestBookSchedule(TestCase):
+    fixtures = ["all_data.json"]
 
-
+    def test_book_appointment(self):
+        c = Client()
+        response_login = c.post(reverse('log_in'), {'username': 'test1', 'password': 'test1'})
+        test_animal = animals.models.Animal.objects.filter(id=1).first()
+        start_time = datetime(2023, 10, 31, 8, 0, tzinfo=timezone.utc)
+        chosen_duration = 1
+        response_booking = c.post(reverse('get_schedule', kwargs={'animal_id': test_animal.id}), {'start_time':datetime.timestamp(start_time), 'chosen_duration':chosen_duration })
+        status_code = response_booking.status_code
+        booked_appointment = animals.models.Schedule.objects.get(start_time=start_time)
+        self.assertEqual(start_time, booked_appointment.start_time)
+        self.assertIn('_auth_user_id', c.session)
+        self.assertEqual(status_code, 200)
