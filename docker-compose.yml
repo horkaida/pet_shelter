@@ -5,12 +5,17 @@ services:
     build: .
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    command: python manage.py runserver 0.0.0.0:8000
 
   db:
     image: postgres
     restart: always
+    container_name: pgdb
+    ports:
+      - "5433:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
