@@ -127,6 +127,7 @@ class TestSchedule(unittest.TestCase):
         self.assertEqual(expected_res, available_slots)
 
 class TestFeedback(TestCase):
+
     fixtures = ["all_data.json"]
     def test_create_feedback(self):
         c = Client()
@@ -139,10 +140,20 @@ class TestFeedback(TestCase):
         self.assertIn('_auth_user_id', c.session)
         self.assertEqual(status_code_, 302)
 
+    def test_get_all_feedbacks(self):
+        c = Client()
+        all_feedbacks = animals.models.Feedback.objects.all().values()
+        feedback_titles = [feedback['title'] for feedback in all_feedbacks]
+        response = c.get(reverse('get_all_feedbacks'))
+        status_code = response.status_code
+        self.assertEqual(status_code, 200)
+        for title in feedback_titles:
+            self.assertIn(title, response.content.decode('utf-8'))
+
 
 class TestBookSchedule(TestCase):
-    fixtures = ["all_data.json"]
 
+    fixtures = ["all_data.json"]
     def test_book_appointment(self):
         c = Client()
         response_login = c.post(reverse('log_in'), {'username': 'test1', 'password': 'test1'})
@@ -155,3 +166,33 @@ class TestBookSchedule(TestCase):
         self.assertEqual(start_time, booked_appointment.start_time)
         self.assertIn('_auth_user_id', c.session)
         self.assertEqual(status_code, 200)
+
+
+class TestAnimal(TestCase):
+
+    fixtures = ["all_data.json"]
+    def test_get_animal(self):
+        c = Client()
+        test_animal = animals.models.Animal.objects.filter(id=1).first()
+        response = c.get(reverse('get_animal', kwargs={'animal_id': test_animal.id}))
+        status_code = response.status_code
+        is_animal = test_animal.name in response.content.decode('utf-8')
+        self.assertEqual(status_code, 200)
+        self.assertTrue(is_animal)
+
+    def test_get_all_animals(self):
+        c = Client()
+        all_animals = animals.models.Animal.objects.all().values()
+        response = c.get(reverse('get_all_animals'))
+        animals_name = [animal['name'] for animal in all_animals]
+        status_code = response.status_code
+        self.assertEqual(status_code, 200)
+        for name in animals_name:
+            self.assertIn(name, response.content.decode('utf-8'))
+
+
+
+
+
+
+
