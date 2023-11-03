@@ -15,8 +15,7 @@ class Animal(models.Model):
     description = models.TextField()
     healthy = models.BooleanField()
     animal_type = models.ForeignKey(AnimalType, on_delete=models.CASCADE)
-    # def __str__(self):
-    #     return self.name
+
 
 
 class AnimalMedia(models.Model):
